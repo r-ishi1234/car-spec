@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/displaymemo.ts","./src/main.tsx","./src/speclistorder.ts","./src/specvaluebylabel.ts","./src/vite-env.d.ts","./src/api/vehicles.ts","./src/data/toyotaspecs.ts","./src/types/vehiclespec.ts"],"version":"5.6.3"}

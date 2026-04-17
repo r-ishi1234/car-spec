@@ -1,0 +1,54 @@
+---
+description: 車種スペックViewer（トヨタ・ホンダ・日産等）のレイアウト・データ方針（ユーザー確定要件）
+globs: src/**/*
+alwaysApply: true
+---
+
+# 車種スペック Viewer（確定要件）
+
+## 目的
+
+- **複数メーカー**のスペック比較表示（Vite + React + TS）。現状 **Toyota** / **Honda** / **Nissan**（シードで拡張）。
+- **車両スペックは SQLite ファイル** `data/specs.db` に保存し、**Express API** `GET /api/vehicles` からフロントが取得する。
+- 初回は `server/seed-vehicles.json` で DB を生成。車種追加時は JSON に `id` 付きで追記し **API 再起動**すると、既存 DB に **未登録 id だけ** `INSERT OR IGNORE` で取り込む（`server/db.ts` の `mergeNewVehiclesFromSeed`）。全入れ替えは `data/specs.db` を削除してから起動。
+- シードの **`manufacturer`** は省略時 **Toyota**。他メーカーは `"manufacturer": "Honda"` / `"Nissan"` 等を付与。既存 DB は起動時に **`manufacturer` 列のマイグレーション**（`ALTER TABLE … DEFAULT 'Toyota'`）が走る。
+
+## 開発起動
+
+- `npm run dev` … API（:3001）と Vite（:5173）を同時起動。フロントは `/api` を Vite プロキシ経由で叩く。
+- `npm run dev:api` … API のみ。
+- 本番ビルド後は API を別ホストで動かし、フロントに `VITE_API_BASE` でオリジンを指定可能。
+
+## 表示項目（メモファイル）
+
+- **行ラベルと並び順**は **`表示項目メモ.txt`**（`src/displayMemo.ts` で `?raw` 読込）。
+- セル値は **`src/specValueByLabel.ts`** でラベル→車両オブジェクトにマッピング。
+
+## 左メニュー（表示項目・車種列）
+
+- **メーカー切替**（トヨタ / ホンダ / 日産）、`localStorage` キー `specViewerManufacturer`。
+- **行（表示項目）**の表示中 / 非表示の切替、`localStorage` キー `toyotaSpecItemVisibility`。
+- **行の表示順**（表示中の並び＝表の行順）、`localStorage` キー `toyotaSpecItemRowOrder`（ラベル文字列の配列）。左メニュー「表示項目」内の「表示中」でラベル行をドラッグして並べ替え（右の「−」は非表示のみ）。
+- **列（車種・グレードごとの列）**の表示中 / 非表示の切替、`localStorage` キー `toyotaSpecVehicleVisibility`（車両 `id` をキーに保存）。
+- **列の表示順**（メーカーごと）、`localStorage` キー `specVehicleColumnOrder`（JSON：`Toyota` / `Honda` / `Nissan` キーに車両 `id` の配列）。左メニュー「車種」内の「表示中」で車名行をドラッグして並べ替え（右の「−」は非表示のみ）。
+- 上部（タイトル・件数）は固定し、**車種**と**表示項目**を上下それぞれ約半分の高さで分割。**メニュー全体はスクロールさせず**、各ブロック内の一覧のみ縦スクロール。
+- **表示順初期化** … 「すべて非表示」の右に配置。**車種**ブロックのボタンは選択中メーカーの**列順のみ**を API 既定順に戻す（`specVehicleColumnOrder` の当該メーカー分を空に）。**表示項目**ブロックのボタンは**行順のみ**をメモ既定順に戻す（`toyotaSpecItemRowOrder` をクリアして再生成）。
+
+## 表レイアウト（必須）
+
+- **列＝車種**、**行＝メモの項目**（表示オン・メモ順）。
+- ヘッダに車名＋グレード。**表の項目列**は横スクロール時 `sticky`。
+- サイドメニューは表のさらに左。
+
+## ヘッダー参考画像
+
+- API 応答に **`imageUrl`** を含める（`server/modelHeaderImages.ts`、メーカー・`modelName` で切替）。未設定時は空文字。
+
+## 明示依頼がない限り行わないこと
+
+- **商品スペック風の大型比較UI**（明示依頼時のみ）。
+
+## 変更時の注意
+
+- 表を **縦長一覧（行＝車）に戻さない**。
+- 要件追加・変更は本ルールを更新する。

@@ -1,0 +1,663 @@
+/* Full viewport height for sticky header + scroll area */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: #f4f6f8;
+  color: #111827;
+}
+
+.app-layout {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.confirm-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.confirm-dialog {
+  width: min(100%, 22rem);
+  padding: 1.1rem 1.15rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  box-shadow: 0 16px 48px rgba(15, 23, 42, 0.18);
+}
+
+.confirm-dialog__message {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #111827;
+}
+
+.confirm-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.confirm-dialog__btn {
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.confirm-dialog__btn:hover {
+  background: #f9fafb;
+}
+
+.confirm-dialog__btn--primary {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #fff;
+}
+
+.confirm-dialog__btn--primary:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+/* ---- Left menu (everything except table) ---- */
+.item-menu {
+  flex: 0 0 280px;
+  max-width: min(280px, 40vw);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0.75rem 0.75rem 0.75rem 1rem;
+  background: #fff;
+  border-right: 1px solid #e5e7eb;
+  box-shadow: 2px 0 12px rgba(15, 23, 42, 0.04);
+}
+
+.item-menu__top {
+  flex-shrink: 0;
+}
+
+.item-menu__header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.35rem;
+  margin-bottom: 0.25rem;
+}
+
+.item-menu__header-text {
+  min-width: 0;
+  flex: 1;
+}
+
+.item-menu__h1 {
+  margin: 0.25rem 0 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.sidebar-toggle {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #f9fafb;
+  font-size: 1.35rem;
+  line-height: 1;
+  color: #4b5563;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-toggle:hover {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.sidebar-rail {
+  flex: 0 0 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem 0.25rem;
+  background: #fff;
+  border-right: 1px solid #e5e7eb;
+  box-shadow: 2px 0 8px rgba(15, 23, 42, 0.04);
+}
+
+.sidebar-toggle--open {
+  width: 2rem;
+  height: 2.5rem;
+  font-size: 1.5rem;
+}
+
+.maker-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0 0 0.35rem;
+}
+
+.maker-switch__btn {
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #4b5563;
+  cursor: pointer;
+  font: inherit;
+}
+
+.maker-switch__btn:hover {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.maker-switch__btn--active {
+  border-color: #15803d;
+  background: #ecfdf5;
+  color: #14532d;
+}
+
+.sidebar-meta {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.sidebar-status {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  color: #92400e;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 6px;
+  padding: 0.45rem 0.55rem;
+}
+
+.sidebar-error {
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.55rem;
+  border-radius: 6px;
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+}
+
+.sidebar-error__msg {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  color: #991b1b;
+  word-break: break-word;
+}
+
+.btn-retry {
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid #fca5a5;
+  background: #fff;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.btn-retry:hover {
+  background: #fee2e2;
+}
+
+.item-menu__block {
+  flex-shrink: 0;
+  padding-top: 0.25rem;
+  border-top: 1px solid #e5e7eb;
+  margin-bottom: 0.5rem;
+}
+
+.item-menu__block--pane {
+  margin-bottom: 0.35rem;
+}
+
+.item-menu__pane:not(:first-child) .item-menu__block {
+  border-top: none;
+  padding-top: 0.45rem;
+}
+
+.item-menu__split {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.item-menu__pane {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.item-menu__pane + .item-menu__pane {
+  border-top: 1px solid #e5e7eb;
+}
+
+.item-menu__block-title {
+  margin: 0.5rem 0 0.15rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b7280;
+}
+
+.item-menu__bulk {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.35rem;
+}
+
+.btn-tiny {
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.btn-tiny:hover {
+  background: #e5e7eb;
+}
+
+.btn-tiny:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.item-menu__pane-scroll {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.15rem;
+}
+
+.item-menu__section {
+  margin-bottom: 0.75rem;
+}
+
+.item-menu__section-title {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #374151;
+}
+
+.item-menu__count {
+  font-weight: 500;
+  color: #9ca3af;
+}
+
+.item-menu__draggable-li {
+  display: flex;
+  align-items: stretch;
+  gap: 0.2rem;
+  margin-bottom: 0.15rem;
+}
+
+/* 緑枠＝ドラッグ、右ボタン＝非表示（車種列・表示項目の「表示中」） */
+.item-menu__row-drag {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  padding: 0.28rem 0.45rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font: inherit;
+  text-align: left;
+  cursor: grab;
+  user-select: none;
+}
+
+.item-menu__row-drag:active {
+  cursor: grabbing;
+}
+
+.item-menu__row-drag--on {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+}
+
+.item-menu__row-drag--on:hover {
+  filter: brightness(0.97);
+}
+
+.item-menu__row-hide-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  min-height: 2rem;
+  padding: 0;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.item-menu__row-hide-btn:hover {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.item-menu__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item-menu__row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  padding: 0.28rem 0.4rem;
+  margin-bottom: 0.15rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.item-menu__row--on {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+}
+
+.item-menu__row--off {
+  background: #f9fafb;
+  border-color: #e5e7eb;
+  opacity: 0.85;
+}
+
+.item-menu__row:hover {
+  filter: brightness(0.97);
+}
+
+.item-menu__label {
+  font-size: 0.78rem;
+  line-height: 1.25;
+  flex: 1;
+  min-width: 0;
+}
+
+.item-menu__action {
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #6b7280;
+}
+
+/* ---- Main: table only ---- */
+.main-panel {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 1rem 0.75rem 0.75rem;
+}
+
+/* Vertical scroll for body rows + horizontal scroll always reserves gutter */
+.table-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overflow-x: scroll;
+  scrollbar-gutter: stable;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.table-wrap__placeholder {
+  min-height: 120px;
+}
+
+.spec-table {
+  /* 車種 / 年式 / 画像(デモ) / グレード の4行＋左上を揃える（border-box 内に border 含む） */
+  --spec-head-r1: 2.5rem;
+  --spec-head-r2: 2rem;
+  --spec-head-r3: 5.25rem;
+  --spec-head-r4: 2.125rem;
+  /* 車種グループ境界・「項目」列の右線 */
+  --spec-group-border: #d1d5db;
+  --spec-head-row-sep: #e5e7eb;
+  width: max-content;
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.78rem;
+}
+
+.spec-table th,
+.spec-table td {
+  border-bottom: 1px solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
+  padding: 0.35rem 0.45rem;
+  vertical-align: top;
+  background: #fff;
+}
+
+/* 1段目: 車種 */
+.spec-table thead tr.spec-table__head-model th.spec-table__model-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  box-sizing: border-box;
+  height: var(--spec-head-r1);
+  min-height: var(--spec-head-r1);
+  max-height: var(--spec-head-r1);
+  padding: 0 0.45rem;
+  background: #e8eaf6;
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-align: center;
+  vertical-align: middle;
+  white-space: normal;
+  line-height: 1.2;
+  border-bottom: 1px solid var(--spec-head-row-sep);
+  border-right: 1px solid var(--spec-group-border);
+}
+
+/* 2段目: 世代・年式（modelYearNote） */
+.spec-table thead tr.spec-table__head-gen th.spec-table__model-gen {
+  position: sticky;
+  top: var(--spec-head-r1);
+  z-index: 2;
+  box-sizing: border-box;
+  min-width: 7.5rem;
+  height: var(--spec-head-r2);
+  min-height: var(--spec-head-r2);
+  max-height: var(--spec-head-r2);
+  padding: 0.2rem 0.45rem;
+  background: #f1f5f9;
+  font-weight: 500;
+  font-size: 0.68rem;
+  text-align: center;
+  vertical-align: middle;
+  white-space: normal;
+  line-height: 1.25;
+  color: #64748b;
+  border-bottom: 1px solid var(--spec-head-row-sep);
+  border-right: 1px solid var(--spec-group-border);
+}
+
+.spec-table__model-gen .spec-table__model-gen-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  width: 100%;
+  text-align: center;
+}
+
+/* 3段目: 画像（車種ごとの参考画像） */
+.spec-table thead tr.spec-table__head-photo th.spec-table__photo-cell {
+  position: sticky;
+  top: calc(var(--spec-head-r1) + var(--spec-head-r2));
+  z-index: 2;
+  box-sizing: border-box;
+  height: var(--spec-head-r3);
+  min-height: var(--spec-head-r3);
+  max-height: var(--spec-head-r3);
+  padding: 0.25rem 0.35rem;
+  background: #fafafa;
+  vertical-align: middle;
+  text-align: center;
+  border-bottom: 1px solid var(--spec-head-row-sep);
+  border-right: 1px solid #e5e7eb;
+}
+
+.spec-table thead tr.spec-table__head-photo th.spec-table__photo-cell.spec-table__col-group-end {
+  border-right: 1px solid var(--spec-group-border);
+}
+
+.spec-table__header-img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  max-height: 4.5rem;
+  object-fit: contain;
+  border-radius: 4px;
+  border: 1px solid #e5e7eb;
+}
+
+/* 4段目: グレード */
+.spec-table thead tr.spec-table__head-grade th.spec-table__grade {
+  position: sticky;
+  top: calc(
+    var(--spec-head-r1) + var(--spec-head-r2) + var(--spec-head-r3)
+  );
+  z-index: 2;
+  box-sizing: border-box;
+  height: var(--spec-head-r4);
+  min-height: var(--spec-head-r4);
+  max-height: var(--spec-head-r4);
+  padding: 0 0.45rem;
+  background: #f9fafb;
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  color: #4b5563;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.spec-table__corner {
+  position: sticky;
+  left: 0;
+  z-index: 6;
+  min-width: 9rem;
+  max-width: 14rem;
+  background: #eef2ff;
+}
+
+.spec-table thead tr.spec-table__head-model th.spec-table__corner {
+  top: 0;
+  z-index: 7;
+  box-sizing: border-box;
+  height: calc(
+    var(--spec-head-r1) + var(--spec-head-r2) + var(--spec-head-r3) +
+      var(--spec-head-r4)
+  );
+  min-height: calc(
+    var(--spec-head-r1) + var(--spec-head-r2) + var(--spec-head-r3) +
+      var(--spec-head-r4)
+  );
+  max-height: calc(
+    var(--spec-head-r1) + var(--spec-head-r2) + var(--spec-head-r3) +
+      var(--spec-head-r4)
+  );
+  padding: 0 0.45rem;
+  background: #e0e7ff;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.78rem;
+  line-height: 1.2;
+  border-bottom: 1px solid #e5e7eb;
+  border-right: 1px solid var(--spec-group-border);
+}
+
+.spec-table__model-head {
+  min-width: 7.5rem;
+}
+
+.spec-table__grade {
+  min-width: 7.5rem;
+}
+
+/* 車種グループ右端（グレード行・本体） */
+.spec-table th.spec-table__grade.spec-table__col-group-end,
+.spec-table td.spec-table__col-group-end {
+  border-right: 1px solid var(--spec-group-border);
+}
+
+.spec-table__rowhead {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  text-align: left;
+  font-weight: 600;
+  background: #f9fafb;
+  min-width: 9rem;
+  max-width: 14rem;
+  white-space: normal;
+  border-right: 1px solid var(--spec-group-border);
+}
+
+.spec-table__cell {
+  white-space: nowrap;
+}
+
+.cell-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

@@ -4,7 +4,10 @@ import {
   type VehicleManufacturer,
 } from "../types/vehicleSpec";
 
-const base = import.meta.env.VITE_API_BASE ?? "";
+/** 本番は Express が同一オリジンで /api を出すため相対 URL のみ。localhost が焼き付いた VITE_API_BASE で誤って取得しないようにする。 */
+const base = import.meta.env.PROD
+  ? ""
+  : (import.meta.env.VITE_API_BASE ?? "").replace(/\/$/, "");
 
 function normalizeManufacturer(raw: unknown): VehicleManufacturer {
   if (

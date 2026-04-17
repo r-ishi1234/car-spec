@@ -3,7 +3,7 @@ import express from "express";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { listVehicles } from "./db.js";
+import { getDatabase, listVehicles } from "./db.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, "..");
@@ -11,24 +11,13 @@ const distDir = path.join(projectRoot, "dist");
 
 const PORT = Number(process.env.PORT) || 3001;
 
-function corsOrigins(): string[] | boolean {
-  const local = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://localhost:4173",
-    "http://127.0.0.1:4173",
-  ];
-  const render = process.env.RENDER_EXTERNAL_URL?.replace(/\/$/, "");
-  const extra = (process.env.CORS_ORIGINS ?? "")
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
-  const list = [...local, ...(render ? [render] : []), ...extra];
-  return list.length > 0 ? list : true;
-}
-
 const app = express();
-app.use(cors({ origin: corsOrigins() }));
+app.use(
+  cors({
+    origin: true,
+    credentials: false,
+  })
+);
 
 app.get("/api/vehicles", async (_req, res) => {
   try {
@@ -59,7 +48,17 @@ if (fs.existsSync(distDir)) {
   });
 }
 
-app.listen(PORT, () => {
-  const mode = fs.existsSync(distDir) ? "web+api" : "api-only";
-  console.log(`[server] ${mode} http://localhost:${PORT}`);
-});
+async function start() {
+  try {
+    await getDatabase();
+    console.log("[db] ready");
+  } catch (e) {
+    console.error("[db] init failed", e);
+  }
+  app.listen(PORT, "0.0.0.0", () => {
+    const mode = fs.existsSync(distDir) ? "web+api" : "api-only";
+    console.log(`[server] ${mode} http://0.0.0.0:${PORT}`);
+  });
+}
+
+void start();

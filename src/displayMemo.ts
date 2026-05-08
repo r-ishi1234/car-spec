@@ -1,4 +1,4 @@
-import memoRaw from "../表示項目メモ.txt?raw";
+import memoRaw from "../display-item-memo.txt?raw";
 
 /** メモファイルの行順（空行除外） */
 export const MEMO_ITEM_LABELS: string[] = memoRaw

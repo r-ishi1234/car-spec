@@ -11,7 +11,44 @@ const distDir = path.join(projectRoot, "dist");
 
 const PORT = Number(process.env.PORT) || 3001;
 
+/** 空なら制限なし。例: "61.113.94.120" または "1.2.3.4,5.6.7.8"（Cloud Run では trust proxy 必須） */
+const allowedIps = (process.env.ALLOWED_IPS ?? "")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+
+function normalizeClientIp(raw: string): string {
+  if (raw.startsWith("::ffff:")) return raw.slice(7);
+  return raw;
+}
+
+function getClientIp(req: express.Request): string {
+  const xff = req.headers["x-forwarded-for"];
+  if (typeof xff === "string") {
+    const first = xff.split(",")[0]?.trim();
+    if (first) return normalizeClientIp(first);
+  }
+  const ra = req.socket.remoteAddress;
+  return ra ? normalizeClientIp(ra) : "";
+}
+
 const app = express();
+app.set("trust proxy", 1);
+
+app.use((req, res, next) => {
+  if (allowedIps.length === 0) {
+    next();
+    return;
+  }
+  const ip = getClientIp(req);
+  if (allowedIps.includes(ip)) {
+    next();
+    return;
+  }
+  console.warn("[ip] deny", ip, req.method, req.url);
+  res.status(403).send("Forbidden");
+});
+
 app.use(
   cors({
     origin: true,

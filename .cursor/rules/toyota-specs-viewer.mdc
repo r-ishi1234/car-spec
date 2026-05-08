@@ -21,7 +21,7 @@ alwaysApply: true
 
 ## 表示項目（メモファイル）
 
-- **行ラベルと並び順**は **`表示項目メモ.txt`**（`src/displayMemo.ts` で `?raw` 読込）。
+- **行ラベルと並び順**は **`display-item-memo.txt`**（ルート。`src/displayMemo.ts` で `?raw` 読込。Cloud Build では日本語ファイル名が化けるため ASCII 名）。
 - セル値は **`src/specValueByLabel.ts`** でラベル→車両オブジェクトにマッピング。
 
 ## 左メニュー（表示項目・車種列）
